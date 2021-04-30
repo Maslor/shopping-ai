@@ -66,13 +66,15 @@ def load_data(filename):
     dataset["Revenue"] = dataset["Revenue"].apply(lambda x: 1 if x is True else 0)
     labels = dataset["Revenue"].values
 
+    dataset.drop("Revenue", axis='columns', inplace=True)
+
     dataset["VisitorType"] = dataset["VisitorType"].apply(lambda v: 1 if v == "Returning_Visitor" else 0)
     dataset["Weekend"] = dataset["Weekend"].apply(lambda w: 1 if w is True else 0)
     dataset["Month"] = dataset["Month"].apply(lambda m: "Jun" if m == "June" else m)
     dataset["Month"] = dataset["Month"].apply(lambda m: abbr_month_to_index.get(m))
     evidence = []
-    for column in dataset.keys():
-        evidence.append(dataset[column].values.to_tolist())
+    for row in range(len(dataset)):
+        evidence.append(dataset.iloc[row].to_list())
 
     return evidence, labels
 
